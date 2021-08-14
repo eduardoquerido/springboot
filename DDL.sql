@@ -2,6 +2,8 @@ create schema anotacao;
 
 use anotacao;
 
+drop user usuario@localhost;
+flush privileges;
 create user 'usuario'@'localhost' identified by 'senhaforte';
 
 grant select, insert, delete, update on anotacao.* to user@'localhost';
@@ -25,8 +27,8 @@ create table prd_produto (
   prd_id bigint unsigned not null auto_increment,
   prd_nome varchar(50) not null,
   primary key (prd_id),
-  unique key uk_produto_nome (prd_nome)
-)
+  unique key uni_produto_nome (prd_nome)
+);
 
 create table uau_usuario_autorizacao (
   usr_id bigint unsigned not null,
