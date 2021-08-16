@@ -11,113 +11,91 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.sp.fatec.springbootapp.entity.Autorizacao;
-import br.gov.sp.fatec.springbootapp.entity.Usuario;
-import br.gov.sp.fatec.springbootapp.entity.Produto;
-import br.gov.sp.fatec.springbootapp.repository.AutorizacaoRepository;
-import br.gov.sp.fatec.springbootapp.repository.UsuarioRepository;
-import br.gov.sp.fatec.springbootapp.repository.ProdutoRepository;
-import br.gov.sp.fatec.springbootapp.service.SegurancaService;
+import br.gov.sp.fatec.springbootapp.entity.Curso;
+import br.gov.sp.fatec.springbootapp.entity.Aluno;
 
+import br.gov.sp.fatec.springbootapp.repository.AlunoRepository;
+import br.gov.sp.fatec.springbootapp.repository.CursoRepository;
+
+import br.gov.sp.fatec.springbootapp.service.MatriculaService;
+
+// @Transactional serve para garantir que só será salvo no banco se toda a operação funcionar, qualquer falha ele não irá comitar
+// @Rollback serve para voltar o banco ao estado inicial ao teste
 @SpringBootTest
 @Transactional
 @Rollback
 class SpringBootAppApplicationTests {
 
+    // @Autowired serve para poder usar a instância que o spring gerou na propriedade declarada
+    // Ex. a instância CursoRepository será usado na propriedade cursoRepo
     @Autowired
-    private UsuarioRepository usuarioRepo;
-
-    @Autowired
-    private AutorizacaoRepository autRepo;
-
-    @Autowired
-    private SegurancaService segService;
+    private CursoRepository cursoRepo;
 
     @Autowired
-    private ProdutoRepository prodRepo;
+    private AlunoRepository alunoRepo;
 
-	@Test
-	void contextLoads() {
-    }
+    @Autowired
+    private MatriculaService matService;
 
+    // @Test é para informar que a seguinte função é um teste
     @Test
-    void testaNovaAutorizacao() {
-        Autorizacao aut = new Autorizacao();
-        aut.setNome("ROLE_USUARIO"); // Autorização de usuário que terá acesso ao produto
-        autRepo.save(aut);
-        assertNotNull(autRepo.findByNome("ROLE_USUARIO"));
+    void testaNovoCurso() {
+        Curso curso = new Curso();
+        curso.setNome("ADS");
+        cursoRepo.save(curso);
+        assertNotNull(cursoRepo.findByNome("ADS"));
     }	
 
+    @Test
+    void testaServicoCriarCurso() {
+        Curso curso = matService.criarCurso("ADS");
+        assertNotNull(curso);
+    }
+
+    @Test
+    void testaNovoAluno() {
+        Curso curso = new Curso();
+        curso.setNome("ADS");
+        cursoRepo.save(curso);
+        Aluno aluno = new Aluno();
+        aluno.setNome("Eduardo");
+        aluno.setMatricula("123341234123");
+        aluno.setCurso(curso);
+        alunoRepo.save(aluno);
+        assertNotNull(alunoRepo.findByNome("Eduardo"));
+    }	
+
+    @Test
+    void testaServicoCriarAluno() {
+        Curso curso = matService.criarCurso("ADS");
+        Aluno aluno = matService.criarAluno("Eduardo", "1231414123123", curso);
+    }
+
 	@Test
-    void testaNovoUsuarioFindByNome() {
-        Usuario usuario = new Usuario();
-        usuario.setNome("Usuario");
-        usuario.setSenha("SenhaF0rte");
-        usuarioRepo.save(usuario);
-        assertNotNull(usuarioRepo.findByNome("Usuario"));
+    void testaAlunoFindByNome() {
+        Curso curso = matService.criarCurso("DSM");
+        Aluno aluno = matService.criarAluno("Eduardo2", "319283891731", curso);
+        assertNotNull(alunoRepo.findByNome("Eduardo2"));
+    }
+
+	@Test
+    void testaAlunoFindByNomeAndMatricula() {
+        Curso curso = matService.criarCurso("DSM");
+        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", curso);
+        assertNotNull(alunoRepo.findByNomeAndMatricula("Eduardo3", "9893719823712"));
     }
 
     @Test
-    void testaNovoUsuarioBuscaPorNome() {
-        Usuario usuario = new Usuario();
-        usuario.setNome("Usuario");
-        usuario.setSenha("SenhaF0rte");
-        usuarioRepo.save(usuario);
-        assertNotNull(usuarioRepo.buscaUsuarioPorNome("Usuario"));
+    void testaAlunoBuscaPorNomeCurso() {
+        Curso curso = matService.criarCurso("DSM");
+        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", curso);
+        assertNotNull(alunoRepo.buscaPorNomeCurso("DSM"));
     }
 
     @Test
-    void testaInsercaoUsuarioAutorizacao() {
-        Usuario usuario = new Usuario();
-        usuario.setNome("Nome");
-        usuario.setSenha("senhamuitoforte");
-        usuarioRepo.save(usuario);
-        Autorizacao aut = new Autorizacao();
-        aut.setNome("ROLE_USUARIO");
-        aut.setUsuarios(new HashSet<Usuario>());
-        aut.getUsuarios().add(usuario);
-        autRepo.save(aut);
-        assertNotNull(aut.getUsuarios().iterator().next().getId());
-    }
-
-    @Test
-    void testaNovoProdutoBuscaPorNome() {
-        Produto prod = new Produto();
-        prod.setNome("Produto1");
-        prodRepo.save(prod);
-        assertNotNull(prodRepo.buscaProdutoPorNome("Produto1"));
-    }
-
-    @Test
-    void testaNovoProdutoFindByNome() {
-        Produto prod = new Produto();
-        prod.setNome("Produto1");
-        prodRepo.save(prod);
-        assertNotNull(prodRepo.findByNome("Produto1"));
-    }
-
-    @Test
-    void testaInsercaoProdutoAutorizacao() {
-        Produto prod = new Produto();
-        prod.setNome("Produto Milagroso");
-        prodRepo.save(prod);
-        Autorizacao aut = new Autorizacao();
-        aut.setNome("ROLE_USUARIO"); // Autorização de usuário que terá acesso ao produto
-        aut.setProdutos(new HashSet<Produto>());
-        aut.getProdutos().add(prod);
-        autRepo.save(aut);
-        assertNotNull(aut.getProdutos().iterator().next().getId());
-    }
-
-    @Test
-    void testaServicoCriaUsuario() {
-        Usuario usuario = segService.criarUsuario("Usuário1", "senhamuitoforte", "ROLE_USUARIO");
-        assertNotNull(usuario);
-    }
-
-    @Test
-    void testaServicoCriarProduto() {
-        Produto prod = segService.criarProduto("Produto1", "ROLE_USUARIO");
-        assertNotNull(prod);
+    void testaAlunobuscaPorNomeAndCurso() {
+        Curso curso = matService.criarCurso("DSM");
+        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", curso);
+        assertNotNull(alunoRepo.buscaPorNomeAndCurso("Eduardo", curso.id));
     }
 }

@@ -1,7 +1,5 @@
 package br.gov.sp.fatec.springbootapp.entity;
 
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,28 +8,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name = "prd_produto")
-public class Produto {
+@Table(name = "alu_aluno")
+public class Aluno {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "prd_id")
+    @Column(name = "alu_id")
     private Long id;
 
-    @Column(name = "prd_nome")
+    @Column(name = "alu_nome")
     private String nome;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "produto_autorizacao",
-        joinColumns = { @JoinColumn(name = "prd_id")},
-        inverseJoinColumns = { @JoinColumn(name = "aut_id") }
-        )
-    private Set<Autorizacao> prod_autorizacoes;
+    @Column(name = "alu_matricula")
+    private String matricula;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "alu_curso_id")
+    private Curso curso;
 
     public Long getId() {
         return this.id;
@@ -49,12 +46,20 @@ public class Produto {
         this.nome = nome;
     }
 
-    public Set<Autorizacao> getAutorizacoes() {
-        return this.prod_autorizacoes;
+    public String getMatricula() {
+        return this.matricula;
     }
 
-    public void setAutorizacoes(Set<Autorizacao> prod_autorizacoes) {
-        this.prod_autorizacoes = prod_autorizacoes;
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public Curso getCurso() {
+        return this.curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 
 }

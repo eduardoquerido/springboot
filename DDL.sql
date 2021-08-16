@@ -1,47 +1,27 @@
-create schema anotacao;
+-- drop database curso;
+create schema curso;
 
-use anotacao;
+use curso
 
-drop user usuario@localhost;
-flush privileges;
-create user 'usuario'@'localhost' identified by 'senhaforte';
+-- drop user 'usuario'@'localhost';
+-- flush privileges;
+CREATE USER 'usuario'@'localhost' IDENTIFIED BY 'senhaforte';
 
-grant select, insert, delete, update on anotacao.* to user@'localhost';
+grant select, insert, delete, update on curso.* to 'usuario'@'localhost';
 
-create table usr_usuario (
-  usr_id bigint unsigned not null auto_increment,
-  usr_nome varchar(20) not null,
-  usr_senha varchar(50) not null,
-  primary key (usr_id),
-  unique key uni_usuario_nome (usr_nome)
+create table cur_curso (
+    cur_id bigint unsigned not null auto_increment,
+    cur_nome varchar(20) not null,
+    primary key (cur_id),
+    unique key uni_cur_nome (cur_nome)
 );
 
-create table aut_autorizacao (
-  aut_id bigint unsigned not null auto_increment,
-  aut_nome varchar(20) not null,
-  primary key (aut_id),
-  unique key uni_aut_nome (aut_nome)
-);
-
-create table prd_produto (
-  prd_id bigint unsigned not null auto_increment,
-  prd_nome varchar(50) not null,
-  primary key (prd_id),
-  unique key uni_produto_nome (prd_nome)
-);
-
-create table uau_usuario_autorizacao (
-  usr_id bigint unsigned not null,
-  aut_id bigint unsigned not null,
-  primary key (usr_id, aut_id),
-  foreign key aut_usuario_fk (usr_id) references usr_usuario (usr_id) on delete restrict on update cascade,
-  foreign key aut_autorizacao_fk (aut_id) references aut_autorizacao (aut_id) on delete restrict on update cascade
-);
-
-create table produto_autorizacao (
-  prd_id bigint unsigned not null,
-  aut_id bigint unsigned not null,
-  primary key (prd_id, aut_id),
-  foreign key aut_produto_fk (prd_id) references prd_produto (prd_id) on delete restrict on update cascade,
-  foreign key aut_produto_fk (aut_id) references aut_autorizacao (aut_id) on delete restrict on update cascade
+create table alu_aluno (
+    alu_id bigint unsigned not null auto_increment,
+    alu_curso_id bigint unsigned not null,
+    alu_nome varchar(20) not null,
+    alu_matricula varchar(50) not null,
+    primary key (alu_id),
+    unique key uni_aluno_matricula (alu_matricula),
+    foreign key alu_curso_fk (alu_curso_id) references cur_curso (cur_id) on delete restrict on update cascade
 );
