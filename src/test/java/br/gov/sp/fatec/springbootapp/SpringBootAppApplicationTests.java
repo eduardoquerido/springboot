@@ -44,12 +44,6 @@ class SpringBootAppApplicationTests {
         curso.setNome("ADS");
         cursoRepo.save(curso);
         assertNotNull(cursoRepo.findByNome("ADS"));
-    }	
-
-    @Test
-    void testaServicoCriarCurso() {
-        Curso curso = matService.criarCurso("ADS");
-        assertNotNull(curso);
     }
 
     @Test
@@ -67,35 +61,32 @@ class SpringBootAppApplicationTests {
 
     @Test
     void testaServicoCriarAluno() {
-        Curso curso = matService.criarCurso("ADS");
-        Aluno aluno = matService.criarAluno("Eduardo", "1231414123123", curso);
+        Aluno aluno = matService.criarAluno("Eduardo", "1231414123123", "ADS");
+        assertNotNull(aluno.getId());
     }
 
 	@Test
     void testaAlunoFindByNome() {
-        Curso curso = matService.criarCurso("DSM");
-        Aluno aluno = matService.criarAluno("Eduardo2", "319283891731", curso);
+        Aluno aluno = matService.criarAluno("Eduardo2", "319283891731", "DSM");
         assertNotNull(alunoRepo.findByNome("Eduardo2"));
     }
 
 	@Test
     void testaAlunoFindByNomeAndMatricula() {
-        Curso curso = matService.criarCurso("DSM");
-        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", curso);
+        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", "ADS");
         assertNotNull(alunoRepo.findByNomeAndMatricula("Eduardo3", "9893719823712"));
     }
 
     @Test
     void testaAlunoBuscaPorNomeCurso() {
-        Curso curso = matService.criarCurso("DSM");
-        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", curso);
+        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", "Logística");
         assertNotNull(alunoRepo.buscaPorNomeCurso("DSM"));
     }
 
     @Test
     void testaAlunobuscaPorNomeAndCurso() {
-        Curso curso = matService.criarCurso("DSM");
-        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", curso);
-        assertNotNull(alunoRepo.buscaPorNomeAndCurso("Eduardo", curso.id));
+        Aluno aluno = matService.criarAluno("Eduardo3", "9893719823712", "DSM");
+        Curso curso = cursoRepo.findByNome("DSM");
+        assertNotNull(alunoRepo.buscaPorNomeAndCurso(aluno.getNome(), curso.getId()));
     }
 }

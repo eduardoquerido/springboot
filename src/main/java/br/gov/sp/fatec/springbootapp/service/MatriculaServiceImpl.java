@@ -17,17 +17,15 @@ public class MatriculaServiceImpl implements MatriculaService {
 
     @Autowired
     private CursoRepository cursoRepo;
-
-    @Transactional
-    public Curso criarCurso(String nome) {
-        Curso curso = new Curso();
-        curso.setNome(nome);
-        cursoRepo.save(curso);
-        return curso;
-    }
     
     @Transactional
-    public Aluno criarAluno(String nome, String matricula, Curso curso) {
+    public Aluno criarAluno(String nome, String matricula, String cursoNome) {
+        Curso curso = cursoRepo.findByNome(cursoNome);
+        if(curso == null) {
+            curso = new Curso();
+            curso.setNome(cursoNome);
+            cursoRepo.save(curso);
+        };
         Aluno aluno = new Aluno();
         aluno.setNome(nome);
         aluno.setMatricula(matricula);

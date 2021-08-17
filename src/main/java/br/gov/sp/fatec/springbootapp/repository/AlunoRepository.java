@@ -13,12 +13,11 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long>{
 
     public Aluno findByNomeAndMatricula(String nome, String matricula);
 
-    @Query("select a from Aluno a where a.curso.nome = ?1")
-    public List<Aluno> buscaPorNomeCurso(String curso);
-
-    @Query("select a from Aluno a where a.nome = ?1 and a.curso.id = ?2")
-    public List<Aluno> buscaPorNomeAndCurso(String nome, Long curso_id);
-    
+    @Query("select a from Aluno a inner join a.curso c on c.nome = ?1")
+    public List<Aluno> buscaPorNomeCurso(String curso_nome);
+   
+    @Query("select a from Aluno a inner join a.curso c where a.nome = ?1 and c.id = ?2")
+    public List<Aluno> buscaPorNomeAndCurso(String nome, Long curso_nome);
 }
 
 //     Exemplos:

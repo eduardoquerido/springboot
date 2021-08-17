@@ -5,8 +5,6 @@ import br.gov.sp.fatec.springbootapp.entity.Aluno;
 
 public interface MatriculaService {
 
-    public Curso criarCurso(String nome);
-
-    public Aluno criarAluno(String nome, String matricula, Curso curso);
+    public Aluno criarAluno(String nome, String matricula, String curso);
     
 }
