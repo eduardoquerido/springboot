@@ -1,3 +1,7 @@
+drop user 'user'@'localhost';
+
+drop schema uol;
+
 create schema uol;
 
 use uol;
