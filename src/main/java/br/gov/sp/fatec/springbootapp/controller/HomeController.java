@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class HomeController {
 
-    @GetMapping
-    public String main() {
-        return "Bem vindo a API do BOL.com.br!";
-    }
-    
+  @GetMapping
+  public String welcome() {
+    return "Hello World!";
+  }
+  
 }
