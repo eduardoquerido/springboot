@@ -52,7 +52,7 @@ public class UsuarioController {
   @PostMapping
   public ResponseEntity<Usuario> cadastraNovoUsuario(@RequestBody Usuario usuario,
         UriComponentsBuilder uriComponentsBuilder) {
-    usuario = segurancaService.criarUsuario(usuario.getNome(), usuario.getSenha(), "ROLE_USUARIO");
+    usuario = segurancaService.criarUsuario(usuario.getNome(), usuario.getSenha(), "ROLE_USER");
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setLocation(
         uriComponentsBuilder.path(

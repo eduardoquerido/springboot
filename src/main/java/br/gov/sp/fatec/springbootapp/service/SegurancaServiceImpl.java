@@ -51,12 +51,14 @@ public class SegurancaServiceImpl implements SegurancaService {
 
   @Override
   @PreAuthorize("hasRole('ADMIN')")
+  // PreAuthorize é um annotation para proteger as rotas necessárias de uma autorização
   public List<Usuario> buscarTodosUsuarios() {
     return usuarioRepo.findAll();
   }
 
   @Override
-  @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+  @PreAuthorize("hasAnyRole('USER')")
+  // hasAnyRole serve para autorizar a rota para mais de um tipo de autorização
   public Usuario buscarUsuarioPorId(Long id) {
     Optional<Usuario> usuarioOp = usuarioRepo.findById(id);
     if (usuarioOp.isPresent()) {
@@ -67,6 +69,7 @@ public class SegurancaServiceImpl implements SegurancaService {
 
   @Override
   @PreAuthorize("isAuthenticated()")
+  // isAuthenticated é somente para verificar se o usuario está logado, sem dar importação para as autorizações
   public Usuario buscarUsuarioPorNome(String nome) {
     Usuario usuario = usuarioRepo.findByNome(nome);
     if (usuario != null) {
@@ -95,6 +98,7 @@ public class SegurancaServiceImpl implements SegurancaService {
     return User.builder().username(username).password(usuario.getSenha())
         .authorities(usuario.getAutorizacoes().stream()
             .map(Autorizacao::getNome).collect(Collectors.toList())
+            // Vetor de Autorizações
             .toArray(new String[usuario.getAutorizacoes().size()]))
         .build();
   }

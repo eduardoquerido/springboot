@@ -27,7 +27,7 @@ public class LoginController {
   public Login autenticar(@RequestBody Login login) throws JsonProcessingException {
     Authentication auth = new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
     auth = authManager.authenticate(auth);
-    login.setPassword(null);
+    login.setPassword(null); // apaga a senha do usuário para não ter problema de segurança
     login.setToken(JwtUtils.generateToken(auth));
     return login;
   }

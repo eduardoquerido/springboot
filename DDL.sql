@@ -1,10 +1,10 @@
-create schema anotacao;
+create schema autorizacao;
 
-use anotacao;
+use autorizacao;
 
 create user 'user'@'localhost' identified by 'pass123';
 
-grant select, insert, delete, update on anotacao.* to user@'localhost';
+grant select, insert, delete, update on autorizacao.* to user@'localhost';
 
 create table usr_usuario (
   usr_id bigint unsigned not null auto_increment,

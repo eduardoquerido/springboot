@@ -18,7 +18,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtUtils {
 
-  private static final String KEY = "spring.jwt.sec";
+  private static final String KEY = "qqig(9om4!p7i*0dl@zxa@6h^#nfx8mjp$b1mnjwun7qfmm4#^";
 
   public static String generateToken(Authentication usuario) throws JsonProcessingException {
     ObjectMapper mapper = new ObjectMapper();
@@ -31,6 +31,7 @@ public class JwtUtils {
     Date agora = new Date();
     Long hora = 1000L * 60L * 60L; // Uma hora
     return Jwts.builder().claim("userDetails", usuarioJson).setIssuer("br.gov.sp.fatec").setSubject(usuario.getName())
+        // duração do token é de 1h, então "agora" + hora (1h em milisegundos)
         .setExpiration(new Date(agora.getTime() + hora)).signWith(SignatureAlgorithm.HS512, KEY).compact();
   }
 
