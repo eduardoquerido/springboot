@@ -50,14 +50,14 @@ public class SegurancaServiceImpl implements SegurancaService {
   }
 
   @Override
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
   // PreAuthorize é um annotation para proteger as rotas necessárias de uma autorização
   public List<Usuario> buscarTodosUsuarios() {
     return usuarioRepo.findAll();
   }
 
   @Override
-  @PreAuthorize("hasAnyRole('USER')")
+  @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
   // hasAnyRole serve para autorizar a rota para mais de um tipo de autorização
   public Usuario buscarUsuarioPorId(Long id) {
     Optional<Usuario> usuarioOp = usuarioRepo.findById(id);
@@ -91,15 +91,21 @@ public class SegurancaServiceImpl implements SegurancaService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    // recebendo o nome de usuario vou verificar se esse usuario existe no meu banco de dados
     Usuario usuario = usuarioRepo.findByNome(username);
     if (usuario == null) {
       throw new UsernameNotFoundException("Usuário " + username + " não encontrado!");
+      // se não foi achado um usuario é dado uma exceção
     }
+    // Caso contrario será utilizado o objeto User do spring security para montar um objeto UserDetails
     return User.builder().username(username).password(usuario.getSenha())
+        // seto o nome e a senha do usuario
         .authorities(usuario.getAutorizacoes().stream()
+        // 
             .map(Autorizacao::getNome).collect(Collectors.toList())
-            // Vetor de Autorizações
+            // Vetor de Autorizações onde cada item do vetor é uma autorização do usuário
             .toArray(new String[usuario.getAutorizacoes().size()]))
+            // Essa contrução está pegando a lista de autorizações e está mapeando para um vetor de strings
         .build();
   }
 

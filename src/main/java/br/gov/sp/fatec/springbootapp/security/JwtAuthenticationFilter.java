@@ -24,8 +24,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
       HttpServletRequest servletRequest = (HttpServletRequest) request;
       String authorization = servletRequest.getHeader(HttpHeaders.AUTHORIZATION);
       if (authorization != null) {
-        Authentication credentials = JwtUtils.parseToken(authorization.replaceAll("Bearer ", ""));
+        Authentication credentials = JwtUtils.parseToken(authorization.replaceAll("Bearer ", "")); 
+        // o parseToken irá validar o token para saber se está válido, se não está expirado e etc.
         SecurityContextHolder.getContext().setAuthentication(credentials);
+        // Se o token estiver tudo OK, então na linha acima será feito o login com o TOKEN
       }
       chain.doFilter(request, response);
     } catch (Throwable t) {

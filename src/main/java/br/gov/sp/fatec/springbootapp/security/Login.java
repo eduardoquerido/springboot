@@ -9,6 +9,9 @@ public class Login {
   private String autorizacao;
 
   private String token;
+
+  // O front irá fazer o login e irá receber o usuario, autorizacao e o token para ser utilizado no sistema
+  // Sempre que for pedir algo ao backend o front end irá utilizar esse token
   
   public String getUsername() {
     return username;

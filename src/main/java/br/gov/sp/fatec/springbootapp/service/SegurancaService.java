@@ -8,6 +8,7 @@ import br.gov.sp.fatec.springbootapp.entity.Autorizacao;
 import br.gov.sp.fatec.springbootapp.entity.Usuario;
 
 public interface SegurancaService extends UserDetailsService {
+    // extendendo o UserDetailsService
 
     public Usuario criarUsuario(String nome, String senha, String autorizacao);
 
