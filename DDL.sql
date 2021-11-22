@@ -1,10 +1,10 @@
-create schema autorizacao;
+create schema carros;
 
-use autorizacao;
+use carros;
 
 create user 'user'@'localhost' identified by 'pass123';
 
-grant select, insert, delete, update on autorizacao.* to user@'localhost';
+grant select, insert, delete, update on carros.* to user@'localhost';
 
 create table usr_usuario (
   usr_id bigint unsigned not null auto_increment,
@@ -27,6 +27,16 @@ create table uau_usuario_autorizacao (
   primary key (usr_id, aut_id),
   foreign key aut_usuario_fk (usr_id) references usr_usuario (usr_id) on delete restrict on update cascade,
   foreign key aut_autorizacao_fk (aut_id) references aut_autorizacao (aut_id) on delete restrict on update cascade
+);
+
+create table car_carro (
+  car_id bigint unsigned not null auto_increment,
+  car_nome varchar(100) not null,
+  car_placa varchar(10) not null,
+  usr_owner_id bigint unsigned not null,
+  primary key (car_id),
+  foreign key car_usr_fk (usr_owner_id) references usr_usuario (usr_id) on delete restrict on update cascade,
+  unique key uni_car_placa (car_placa)
 );
 
 insert into usr_usuario (usr_nome, usr_senha)
