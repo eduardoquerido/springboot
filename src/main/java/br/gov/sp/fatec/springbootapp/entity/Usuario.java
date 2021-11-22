@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -41,6 +42,9 @@ public class Usuario {
         inverseJoinColumns = { @JoinColumn(name = "aut_id") }
         )
     private Set<Autorizacao> autorizacoes;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dono")
+	private Set<Carro> carros;
 
     public Long getId() {
         return this.id;
