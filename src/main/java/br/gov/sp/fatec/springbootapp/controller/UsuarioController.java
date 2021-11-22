@@ -43,7 +43,7 @@ public class UsuarioController {
   }
 
   @JsonView(View.UsuarioResumo.class)
-  @GetMapping(value = "/nome")
+  @GetMapping(value = "/nome/{nome}")
   public Usuario buscarPorNome(@RequestParam(value="nome") String nome) {
     return segurancaService.buscarUsuarioPorNome(nome);
   }

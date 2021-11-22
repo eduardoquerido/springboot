@@ -18,7 +18,7 @@ import br.gov.sp.fatec.springbootapp.service.CarroService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
-@RequestMapping(value = "/carro")
+@RequestMapping(value = "/carros")
 @CrossOrigin
 public class CarroController {
 
