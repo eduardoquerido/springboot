@@ -24,7 +24,7 @@ public class CarroServiceImpl implements CarroService {
 
 	@Override
 	@Transactional
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+	
 	public Carro adicionarCarro(String nome, String placa, String dono) {
 		Usuario usuario = usuarioRepo.findByNome(dono);
 		if(usuario == null) {

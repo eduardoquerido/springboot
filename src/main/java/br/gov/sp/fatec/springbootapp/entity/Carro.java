@@ -25,16 +25,16 @@ public class Carro {
 	private Long id;
 	
 	@Column(name = "car_nome", unique=true, length = 100, nullable = false)
-	@JsonView(View.CarroResumo.class)
+	@JsonView(View.CarroCompleto.class)
 	private String nome;
 	
 	@Column(name = "car_placa", length = 10, nullable = false)
-	@JsonView(View.CarroResumo.class)
+	@JsonView(View.CarroCompleto.class)
 	private String placa;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "usr_owner_id")
-	@JsonView(View.CarroCompleto.class)
+	@JsonView(View.CarroResumo.class)
 	private Usuario dono;
 
 	public Long getId() {
